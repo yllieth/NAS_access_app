@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class Storage extends SQLiteOpenHelper {
 	
-	SQLiteDatabase db;
+	private SQLiteDatabase db;
 	
 	private static final int    DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "NASAdmin";

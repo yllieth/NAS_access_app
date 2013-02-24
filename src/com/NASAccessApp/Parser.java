@@ -15,8 +15,8 @@ public class Parser {
 	// ###                          VARIABLES                           ###
 	// ####################################################################
 	
-	File file;
-	String[] acces;
+	private File file;
+	private String[] acces;
 
 	// ####################################################################
 	// ###                         CONSTRUCTEUR                         ###

@@ -17,15 +17,15 @@ public class Record {
 	// ###                          VARIABLES                           ###
 	// ####################################################################
 	
-	int    Number;		// ex: 849984
-	String Type;		// ex: "Information"
-	Date   Date;		// ex: "2013-02-23 18:18:16"
-	String Users;		// ex: "sylvain"
-	String Source;		// ex: "192.168.1.39"
-	String Host;		// ex: "sylvain-pc"
-	String Ressource;	// ex: "Multimedia/FILMS/[Magie] Harry Potter VII - Les Reliques de la Mort - Partie 1.avi"
-	String Protocol;	// ex: "SAMBA"
-	String Action;		// ex: "Read"
+	private int    Number;		// ex: 849984
+	private String Type;		// ex: "Information"
+	private Date   Date;		// ex: "2013-02-23 18:18:16"
+	private String Users;		// ex: "sylvain"
+	private String Source;		// ex: "192.168.1.39"
+	private String Host;		// ex: "sylvain-pc"
+	private String Ressource;	// ex: "Multimedia/FILMS/[Magie] Harry Potter VII - Les Reliques de la Mort - Partie 1.avi"
+	private String Protocol;	// ex: "SAMBA"
+	private String Action;		// ex: "Read"
 
 
 	// ####################################################################
