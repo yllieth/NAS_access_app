@@ -10,7 +10,7 @@ import java.io.File;
  *
  * @author Sylvain
  */
-public class FileManagement {
+public class Files {
 	
 
 	// ####################################################################
