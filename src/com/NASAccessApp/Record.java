@@ -5,23 +5,13 @@
 package com.NASAccessApp;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  *
  * @author Sylvain
  */
 public class Record {
-
-	// ####################################################################
-	// ###                          CONSTANTES                          ###
-	// ####################################################################
-	
-	private static final int    DATABASE_VERSION = 2;
-	private static final String DATABASE_NAME = "NAS";
-	private static final String DATABASE_TABLE_NAME = "access";
 
 	// ####################################################################
 	// ###                          VARIABLES                           ###
@@ -36,18 +26,25 @@ public class Record {
 	private String ressource;	// ex: "Multimedia/FILMS/[Magie] Harry Potter VII - Les Reliques de la Mort - Partie 1.avi"
 	private String protocol;	// ex: "SAMBA"
 	private String action;		// ex: "Read"
-	
-	private Context context;
 
 	// ####################################################################
 	// ###                         CONSTRUCTEUR                         ###
 	// ####################################################################
 
 	Record(){}
-	
-	Record(Context context)
-	{
-		this.context = context;
+
+	Record(Cursor c) {
+		c.moveToFirst();
+		
+		number    = c.getInt(RecordHandler.NUM_FIELD_NUMBER);
+		type      = c.getString(RecordHandler.NUM_FIELD_TYPE);
+		date      = c.getString(RecordHandler.NUM_FIELD_DATE);
+		users     = c.getString(RecordHandler.NUM_FIELD_USER);
+		source    = c.getString(RecordHandler.NUM_FIELD_SOURCE);
+		host      = c.getString(RecordHandler.NUM_FIELD_HOST);
+		ressource = c.getString(RecordHandler.NUM_FIELD_RESSOURCE);
+		protocol  = c.getString(RecordHandler.NUM_FIELD_PROTOCOL);
+		action    = c.getString(RecordHandler.NUM_FIELD_ACTION);
 	}
 	
 	// ####################################################################
@@ -145,60 +142,20 @@ public class Record {
 	// ###                      METHODES D'INSTANCE                     ###
 	// ####################################################################
 	
-	public Record save()
-	{
-		StorageAccess BDD = new StorageAccess(context);
-		long insert = BDD.getInstance().insert(DATABASE_TABLE_NAME, null, createContentValue());
-		BDD.close();
-		
-		return (insert != -1) ? this : null;
-	}
-	
-	public Record get(int number)
-	{
-		StorageAccess BDD = new StorageAccess(context);
-		Cursor c = BDD.getInstance().query(
-				DATABASE_TABLE_NAME,		// table
-				BDD.getColumns(),			// colonnes
-				StorageAccess.FIELD_NUMBER,	// clef
-				null, null, null, null		// args, groupBy, having, orderBy
-		);
-		populate(c);
-		BDD.close();
-		
-		
-		return this;
-	}
-	
-	private ContentValues createContentValue()
+	public ContentValues formatValues()
 	{
 		ContentValues values = new ContentValues();
 		
-		values.put(StorageAccess.FIELD_NUMBER, this.getNumber());
-		values.put(StorageAccess.FIELD_TYPE, this.getType());
-		values.put(StorageAccess.FIELD_DATE, this.getDate());
-		values.put(StorageAccess.FIELD_USER, this.getUsers());
-		values.put(StorageAccess.FIELD_SOURCE, this.getSource());
-		values.put(StorageAccess.FIELD_HOST, this.getHost());
-		values.put(StorageAccess.FIELD_RESSOURCE, this.getRessource());
-		values.put(StorageAccess.FIELD_PROTOCOL, this.getProtocol());
-		values.put(StorageAccess.FIELD_ACTION, this.getAction());
+		values.put(RecordHandler.FIELD_NUMBER, this.getNumber());
+		values.put(RecordHandler.FIELD_TYPE, this.getType());
+		values.put(RecordHandler.FIELD_DATE, this.getDate());
+		values.put(RecordHandler.FIELD_USER, this.getUsers());
+		values.put(RecordHandler.FIELD_SOURCE, this.getSource());
+		values.put(RecordHandler.FIELD_HOST, this.getHost());
+		values.put(RecordHandler.FIELD_RESSOURCE, this.getRessource());
+		values.put(RecordHandler.FIELD_PROTOCOL, this.getProtocol());
+		values.put(RecordHandler.FIELD_ACTION, this.getAction());
 		
 		return values;
-	}
-	
-	private void populate(Cursor c)
-	{
-		c.moveToFirst();
-		
-		this.setNumber(c.getInt(StorageAccess.NUM_FIELD_NUMBER));
-		this.setType(c.getString(StorageAccess.NUM_FIELD_TYPE));
-		this.setDate(c.getString(StorageAccess.NUM_FIELD_DATE));
-		this.setUsers(c.getString(StorageAccess.NUM_FIELD_USER));
-		this.setSource(c.getString(StorageAccess.NUM_FIELD_SOURCE));
-		this.setHost(c.getString(StorageAccess.NUM_FIELD_HOST));
-		this.setRessource(c.getString(StorageAccess.NUM_FIELD_RESSOURCE));
-		this.setProtocol(c.getString(StorageAccess.NUM_FIELD_PROTOCOL));
-		this.setAction(c.getString(StorageAccess.NUM_FIELD_ACTION));
 	}
 }

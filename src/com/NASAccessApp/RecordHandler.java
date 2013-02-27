@@ -4,26 +4,22 @@
  */
 package com.NASAccessApp;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  *
- * @see http://developer.android.com/guide/topics/data/data-storage.html#db
- * @see http://www.tutomobile.fr/comment-utiliser-sqlite-sous-android-tutoriel-android-n%C2%B019/19/10/2010/
  * @author Sylvain
  */
-public class StorageAccess extends SQLiteOpenHelper {
+public class RecordHandler {
 
 	// ####################################################################
 	// ###                          CONSTANTES                          ###
 	// ####################################################################
 	
-	private static final int    DATABASE_VERSION = 1;
-	private static final String DATABASE_NAME = "NAS";
-	private static final String DATABASE_TABLE_NAME = "access";
+	public static final String TABLE_NAME = "access";
 	
 	public static final String FIELD_NUMBER     = "Number";
 	public static final int NUM_FIELD_NUMBER    = 0;
@@ -43,9 +39,24 @@ public class StorageAccess extends SQLiteOpenHelper {
 	public static final int NUM_FIELD_PROTOCOL  = 7;
 	public static final String FIELD_ACTION     = "Action";
 	public static final int NUM_FIELD_ACTION    = 8;
+			
+	// ####################################################################
+	// ###                          VARIABLES                           ###
+	// ####################################################################
+			
+	DatabaseConnexion connexion;
+
+	// ####################################################################
+	// ###                         CONSTRUCTEUR                         ###
+	// ####################################################################
+
+	RecordHandler(DatabaseConnexion connexion) {
+		this.connexion = connexion;
+	}
 	
-	private static final String QUERY_CREATE_TABLE =
-			"CREATE TABLE " + DATABASE_TABLE_NAME + " (" 
+	public static String createTableQuery()
+	{
+		return "CREATE TABLE " + TABLE_NAME + " (" 
 				+ FIELD_NUMBER    + " INTEGER PRIMARY KEY AUTOINCREMENT, " 	// ex: 849984
 				+ FIELD_TYPE      + " TEXT, " 	// ex: "Information"
 				+ FIELD_DATE      + " TEXT, "	// ex: "2013-02-23 18:18:16"
@@ -54,55 +65,21 @@ public class StorageAccess extends SQLiteOpenHelper {
 				+ FIELD_HOST      + " TEXT, " 	// ex: "sylvain-pc"
 				+ FIELD_RESSOURCE + " TEXT, " 	// ex: "Multimedia/FILMS/[Magie] Harry Potter VII - Les Reliques de la Mort - Partie 1.avi"
 				+ FIELD_PROTOCOL  + " TEXT, " 	// ex: "SAMBA"
-				+ FIELD_ACTION    + " TEXT"	// ex: "Read"
+				+ FIELD_ACTION    + " TEXT"		// ex: "Read"
 				+ 
-			");";
-	
-	private static final String QUERY_DROP_TABLE = 
-			"DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";";
-
-	// ####################################################################
-	// ###                          VARIABLES                           ###
-	// ####################################################################
-	
-	private SQLiteDatabase bdd;
-	private String TAG;
-
-	// ####################################################################
-	// ###                         CONSTRUCTEUR                         ###
-	// ####################################################################
-	
-	StorageAccess(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		");";
 	}
 	
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(QUERY_CREATE_TABLE);
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data"); 
-		db.execSQL(QUERY_DROP_TABLE); 
-		onCreate(db); 
-	}
-
-	// ####################################################################
-	// ###                   ACCES A LA BASE DE DONNEES                 ###
-	// ####################################################################
- 
-	/**
-	 * Accesseur à l'instance de la base de données
-	 * 
-	 * @return SQLiteDatabase
-	 * @author Sylvain {25/02/2013}
-	 */
-	public SQLiteDatabase getInstance(){
-		return this.getWritableDatabase();
+	public static String dropTableQuery()
+	{
+		return "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
 	}
 	
-	public  String[] getColumns()
+	// ####################################################################
+	// ###                      METHODES D'INSTANCE                     ###
+	// ####################################################################
+	
+	private String[] getColumns()
 	{
 		return new String[] {
 			FIELD_NUMBER,
@@ -115,5 +92,29 @@ public class StorageAccess extends SQLiteOpenHelper {
 			FIELD_PROTOCOL,
 			FIELD_ACTION
 		};
+	}
+	
+	public Boolean save(Record record)
+	{
+		SQLiteDatabase bdd = connexion.open();
+		long insert = bdd.insert(TABLE_NAME, null, record.formatValues());		
+		connexion.close();
+		
+		return (insert != -1) ? true : false;
+	}
+	
+	public Record get(int number)
+	{
+		SQLiteDatabase bdd = connexion.open();
+		Cursor c = bdd.query(
+				TABLE_NAME,				// table
+				this.getColumns(),		// colonnes
+				FIELD_NUMBER,			// clef
+				null, null, null, null	// args, groupBy, having, orderBy
+		);
+		Record record = new Record(c);
+		connexion.close();
+		
+		return record;
 	}
 }
