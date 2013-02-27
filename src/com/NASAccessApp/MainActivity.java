@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 
 	Button bt_insert;
 	Button bt_select;
-	DatabaseConnexion database;
+	ConnexionBDD database;
 	
     /** Called when the activity is first created. */
     @Override
@@ -20,7 +20,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 		
-		database = new DatabaseConnexion(this);
+		database = new ConnexionBDD(this);
 		
 		bt_insert = (Button) findViewById(R.id.bt_insert);
         bt_select = (Button) findViewById(R.id.bt_select);
@@ -53,7 +53,7 @@ public class MainActivity extends Activity
 				.setRessource("Multimedia/MUSIQUES/Lynda LEMAY/Lynda Lemay - Blessée/16-Lynda Lemay _ Farce d'oreille.mp3")
 				.setProtocol("SAMBA")
 				.setAction("Read");
-			database.getTable("Record").save(test);
+			database.getTableRecord().save(test);
 		} catch (Exception e){
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
@@ -62,7 +62,7 @@ public class MainActivity extends Activity
 	public void select()
 	{
 		try{
-			Record check = database.getTable("Record").get(760000);
+			Record check = database.getTableRecord().get(760000);
 
 			if(check instanceof Record){
 				Toast.makeText(this, check.toString(), Toast.LENGTH_LONG).show();

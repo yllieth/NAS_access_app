@@ -4,7 +4,6 @@
  */
 package com.NASAccessApp;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 /**
@@ -33,6 +32,12 @@ public class Record {
 
 	Record(){}
 
+	/**
+	 * Crée une instance de Record à partir de données récupérés en base de données
+	 * 
+	 * @param Cursor c
+	 * @author Sylvain {28/02/2013}
+	 */
 	Record(Cursor c) {
 		c.moveToFirst();
 		
@@ -133,29 +138,13 @@ public class Record {
 		return this;
 	}
 	
-	public String toString()
-	{
-		return "[" + this.getDate() + "] " + this.getNumber();
-	}
-	
 	// ####################################################################
 	// ###                      METHODES D'INSTANCE                     ###
 	// ####################################################################
 	
-	public ContentValues formatValues()
+	@Override
+	public String toString()
 	{
-		ContentValues values = new ContentValues();
-		
-		values.put(RecordHandler.FIELD_NUMBER, this.getNumber());
-		values.put(RecordHandler.FIELD_TYPE, this.getType());
-		values.put(RecordHandler.FIELD_DATE, this.getDate());
-		values.put(RecordHandler.FIELD_USER, this.getUsers());
-		values.put(RecordHandler.FIELD_SOURCE, this.getSource());
-		values.put(RecordHandler.FIELD_HOST, this.getHost());
-		values.put(RecordHandler.FIELD_RESSOURCE, this.getRessource());
-		values.put(RecordHandler.FIELD_PROTOCOL, this.getProtocol());
-		values.put(RecordHandler.FIELD_ACTION, this.getAction());
-		
-		return values;
+		return "[" + this.getDate() + "] " + this.getNumber();
 	}
 }

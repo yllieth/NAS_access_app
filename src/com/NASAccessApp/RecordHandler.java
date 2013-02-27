@@ -5,7 +5,6 @@
 package com.NASAccessApp;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -44,13 +43,13 @@ public class RecordHandler {
 	// ###                          VARIABLES                           ###
 	// ####################################################################
 			
-	DatabaseConnexion connexion;
+	ConnexionBDD connexion;
 
 	// ####################################################################
 	// ###                         CONSTRUCTEUR                         ###
 	// ####################################################################
 
-	RecordHandler(DatabaseConnexion connexion) {
+	RecordHandler(ConnexionBDD connexion) {
 		this.connexion = connexion;
 	}
 	
@@ -79,6 +78,12 @@ public class RecordHandler {
 	// ###                      METHODES D'INSTANCE                     ###
 	// ####################################################################
 	
+	/**
+	 * Renvoie la liste des colonnes de la table "access".
+	 * 
+	 * @return String[]
+	 * @author Sylvain {28/02/2013}
+	 */
 	private String[] getColumns()
 	{
 		return new String[] {
@@ -94,15 +99,53 @@ public class RecordHandler {
 		};
 	}
 	
+	/**
+	 * Transforme un record en ContentValues pour l'insertion en base de données
+	 * 
+	 * @param Record record
+	 * @return ContentValues
+	 * @author Sylvain {28/02/2013}
+	 */
+	private ContentValues format(Record record)
+	{
+		ContentValues values = new ContentValues();
+		
+		values.put(FIELD_NUMBER, record.getNumber());
+		values.put(FIELD_TYPE, record.getType());
+		values.put(FIELD_DATE, record.getDate());
+		values.put(FIELD_USER, record.getUsers());
+		values.put(FIELD_SOURCE, record.getSource());
+		values.put(FIELD_HOST, record.getHost());
+		values.put(FIELD_RESSOURCE, record.getRessource());
+		values.put(FIELD_PROTOCOL, record.getProtocol());
+		values.put(FIELD_ACTION, record.getAction());
+		
+		return values;
+	}
+	
+	/**
+	 * Enregistre le Record en base de données.
+	 * 
+	 * @param record
+	 * @return Boolean
+	 * @author Sylvain {28/02/2013}
+	 */
 	public Boolean save(Record record)
 	{
 		SQLiteDatabase bdd = connexion.open();
-		long insert = bdd.insert(TABLE_NAME, null, record.formatValues());		
+		long insert = bdd.insert(TABLE_NAME, null, format(record));		
 		connexion.close();
 		
 		return (insert != -1) ? true : false;
 	}
 	
+	/**
+	 * Renvoie un Record précis à partir de son identifiant.
+	 * 
+	 * @param int number
+	 * @return Record
+	 * @author Sylvain {28/02/2013}
+	 */
 	public Record get(int number)
 	{
 		SQLiteDatabase bdd = connexion.open();

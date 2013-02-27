@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * @see http://www.tutomobile.fr/comment-utiliser-sqlite-sous-android-tutoriel-android-n%C2%B019/19/10/2010/
  * @author Sylvain
  */
-public class DatabaseConnexion extends SQLiteOpenHelper {
+public class ConnexionBDD extends SQLiteOpenHelper {
 
 	// ####################################################################
 	// ###                          CONSTANTES                          ###
@@ -33,15 +33,29 @@ public class DatabaseConnexion extends SQLiteOpenHelper {
 	// ###                         CONSTRUCTEUR                         ###
 	// ####################################################################
 	
-	DatabaseConnexion(Context context){
+	ConnexionBDD(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	
+	/**
+	 * Crée la base de donnée lors de l'installation de l'application
+	 * 
+	 * @param SQLiteDatabase db 
+	 * @author Sylvain{__/02/2013}
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(RecordHandler.createTableQuery());
 	}
 
+	/**
+	 * Mise à jour de la structure de la base de données lors d'une mise à jour
+	 * 
+	 * @param SQLiteDatabase db
+	 * @param int oldVersion
+	 * @param int newVersion 
+	 * @author Sylvain {__/02/2013}
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(RecordHandler.dropTableQuery());
@@ -52,11 +66,23 @@ public class DatabaseConnexion extends SQLiteOpenHelper {
 	// ###                   ACCES A LA BASE DE DONNEES                 ###
 	// ####################################################################
 	
-	public RecordHandler getTable(String tableName)
+	/**
+	 * Renvoie le gestionnaire de requêtes sur la table "access".
+	 * 
+	 * @return RecordHandler
+	 * @author Sylvain {28/02/2013}
+	 */
+	public RecordHandler getTableRecord()
 	{
 		return new RecordHandler(this);
 	}
 	
+	/**
+	 * Ouvre la connexion à la base de données précédemment initialisée.
+	 * 
+	 * @return SQLiteDatabase
+	 * @author Sylvain {28/02/2013}
+	 */
 	public SQLiteDatabase open()
 	{
 		return getWritableDatabase();
