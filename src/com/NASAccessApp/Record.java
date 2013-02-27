@@ -7,6 +7,7 @@ package com.NASAccessApp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Record {
 	// ####################################################################
 	
 	private static final int    DATABASE_VERSION = 2;
-	private static final String DATABASE_NAME = "NAS.db";
+	private static final String DATABASE_NAME = "NAS";
 	private static final String DATABASE_TABLE_NAME = "access";
 
 	// ####################################################################
@@ -144,29 +145,25 @@ public class Record {
 	// ###                      METHODES D'INSTANCE                     ###
 	// ####################################################################
 	
-	public void save()
+	public Record save()
 	{
 		StorageAccess BDD = new StorageAccess(context);
-		BDD.open();
-		BDD.getInstance().insert(DATABASE_TABLE_NAME, null, createContentValue());
+		long insert = BDD.getInstance().insert(DATABASE_TABLE_NAME, null, createContentValue());
 		BDD.close();
+		
+		return (insert != -1) ? this : null;
 	}
 	
 	public Record get(int number)
 	{
 		StorageAccess BDD = new StorageAccess(context);
-		BDD.open();
-		try {
-			Cursor c = BDD.getInstance().query(
-					DATABASE_TABLE_NAME,		// table
-					BDD.getColumns(),			// colonnes
-					StorageAccess.FIELD_NUMBER,	// clef
-					null, null, null, null		// args, groupBy, having, orderBy
-			);
-			populate(c);
-		} catch (Exception e) {
-			e.printStackTrace(); 
-		}
+		Cursor c = BDD.getInstance().query(
+				DATABASE_TABLE_NAME,		// table
+				BDD.getColumns(),			// colonnes
+				StorageAccess.FIELD_NUMBER,	// clef
+				null, null, null, null		// args, groupBy, having, orderBy
+		);
+		populate(c);
 		BDD.close();
 		
 		
@@ -177,15 +174,15 @@ public class Record {
 	{
 		ContentValues values = new ContentValues();
 		
-		values.put("INT", this.getNumber());
-		values.put("STRING", this.getType());
-		values.put("STRING", this.getDate().toString());
-		values.put("STRING", this.getUsers());
-		values.put("STRING", this.getSource());
-		values.put("STRING", this.getHost());
-		values.put("STRING", this.getRessource());
-		values.put("STRING", this.getProtocol());
-		values.put("STRING", this.getAction());
+		values.put(StorageAccess.FIELD_NUMBER, this.getNumber());
+		values.put(StorageAccess.FIELD_TYPE, this.getType());
+		values.put(StorageAccess.FIELD_DATE, this.getDate());
+		values.put(StorageAccess.FIELD_USER, this.getUsers());
+		values.put(StorageAccess.FIELD_SOURCE, this.getSource());
+		values.put(StorageAccess.FIELD_HOST, this.getHost());
+		values.put(StorageAccess.FIELD_RESSOURCE, this.getRessource());
+		values.put(StorageAccess.FIELD_PROTOCOL, this.getProtocol());
+		values.put(StorageAccess.FIELD_ACTION, this.getAction());
 		
 		return values;
 	}

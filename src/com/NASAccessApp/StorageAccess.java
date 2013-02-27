@@ -6,8 +6,8 @@ package com.NASAccessApp;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  *
@@ -21,15 +21,15 @@ public class StorageAccess extends SQLiteOpenHelper {
 	// ###                          CONSTANTES                          ###
 	// ####################################################################
 	
-	private static final int    DATABASE_VERSION = 2;
-	private static final String DATABASE_NAME = "NAS.db";
+	private static final int    DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "NAS";
 	private static final String DATABASE_TABLE_NAME = "access";
 	
 	public static final String FIELD_NUMBER     = "Number";
 	public static final int NUM_FIELD_NUMBER    = 0;
 	public static final String FIELD_TYPE       = "Type";
 	public static final int NUM_FIELD_TYPE      = 1;
-	public static final String FIELD_DATE       = "Datetime";
+	public static final String FIELD_DATE       = "Date";
 	public static final int NUM_FIELD_DATE      = 2;
 	public static final String FIELD_USER       = "Users";
 	public static final int NUM_FIELD_USER      = 3;
@@ -46,23 +46,27 @@ public class StorageAccess extends SQLiteOpenHelper {
 	
 	private static final String QUERY_CREATE_TABLE =
 			"CREATE TABLE " + DATABASE_TABLE_NAME + " (" 
-				+ FIELD_NUMBER    + " INT, " 	// ex: 849984
-				+ FIELD_TYPE      + " TEXT" 	// ex: "Information"
-				+ FIELD_DATE      + " TEXT"		// ex: "2013-02-23 18:18:16"
-				+ FIELD_USER      + " TEXT" 	// ex: "sylvain"
-				+ FIELD_SOURCE    + " TEXT" 	// ex: "192.168.1.39"
-				+ FIELD_HOST      + " TEXT" 	// ex: "sylvain-pc"
-				+ FIELD_RESSOURCE + " TEXT" 	// ex: "Multimedia/FILMS/[Magie] Harry Potter VII - Les Reliques de la Mort - Partie 1.avi"
-				+ FIELD_PROTOCOL  + " TEXT" 	// ex: "SAMBA"
-				+ FIELD_ACTION    + " TEXT"		// ex: "Read"
+				+ FIELD_NUMBER    + " INTEGER PRIMARY KEY AUTOINCREMENT, " 	// ex: 849984
+				+ FIELD_TYPE      + " TEXT, " 	// ex: "Information"
+				+ FIELD_DATE      + " TEXT, "	// ex: "2013-02-23 18:18:16"
+				+ FIELD_USER      + " TEXT, " 	// ex: "sylvain"
+				+ FIELD_SOURCE    + " TEXT, " 	// ex: "192.168.1.39"
+				+ FIELD_HOST      + " TEXT, " 	// ex: "sylvain-pc"
+				+ FIELD_RESSOURCE + " TEXT, " 	// ex: "Multimedia/FILMS/[Magie] Harry Potter VII - Les Reliques de la Mort - Partie 1.avi"
+				+ FIELD_PROTOCOL  + " TEXT, " 	// ex: "SAMBA"
+				+ FIELD_ACTION    + " TEXT"	// ex: "Read"
 				+ 
 			");";
+	
+	private static final String QUERY_DROP_TABLE = 
+			"DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";";
 
 	// ####################################################################
 	// ###                          VARIABLES                           ###
 	// ####################################################################
 	
 	private SQLiteDatabase bdd;
+	private String TAG;
 
 	// ####################################################################
 	// ###                         CONSTRUCTEUR                         ###
@@ -78,23 +82,15 @@ public class StorageAccess extends SQLiteOpenHelper {
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase sqld, int i, int i1) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data"); 
+		db.execSQL(QUERY_DROP_TABLE); 
+		onCreate(db); 
 	}
 
 	// ####################################################################
 	// ###                   ACCES A LA BASE DE DONNEES                 ###
 	// ####################################################################
-	
-	/**
-	 * Ouverture de l'accès à la base de données 
-	 * 
-	 * @return void
-	 * @author Sylvain {25/02/2013}
-	 */
-	public void open(){
-		bdd = this.getWritableDatabase();
-	}
  
 	/**
 	 * Accesseur à l'instance de la base de données
@@ -103,7 +99,7 @@ public class StorageAccess extends SQLiteOpenHelper {
 	 * @author Sylvain {25/02/2013}
 	 */
 	public SQLiteDatabase getInstance(){
-		return bdd;
+		return this.getWritableDatabase();
 	}
 	
 	public  String[] getColumns()
