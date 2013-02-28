@@ -7,6 +7,8 @@ package com.NASAccessApp;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -159,5 +161,37 @@ public class RecordHandler {
 		connexion.close();
 		
 		return record;
+	}
+	
+	/**
+	 * Renvoie l'ensemble des Record contnus dans la table "access"
+	 * 
+	 * @return List
+	 * @author Sylvain {28/02/2013}
+	 */
+	public List<Record> getAll()
+	{
+		List<Record> collection = new ArrayList<Record>();
+		
+		SQLiteDatabase bdd = connexion.open();
+		Cursor c = bdd.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+		if (c.moveToFirst()){
+			do {
+				collection.add(new Record(c));
+			} while (c.moveToNext());
+		}
+		
+		return collection;
+	}
+	
+	/**
+	 * Renvoie le nombre de Record de la table "access"
+	 * 
+	 * @return int
+	 * @author Sylvain {28/02/2013}
+	 */
+	public int count()
+	{
+		return getAll().size();
 	}
 }

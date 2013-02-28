@@ -12,6 +12,7 @@ public class MainActivity extends Activity
 	Button bt_insert;
 	Button bt_select;
 	ConnexionBDD database;
+	String url = "http://192.168.1.46:8080/cgi-bin/sys/sysRequest.cgi?subfunc=sys_logs&conncsv=1&count=0.808290574233979&sid=7duduham";
 	
     /** Called when the activity is first created. */
     @Override
@@ -30,7 +31,6 @@ public class MainActivity extends Activity
 				insert();
         	}
         });
-		
 		bt_select.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
 				select();
