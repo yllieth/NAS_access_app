@@ -2,6 +2,9 @@ package com.NASAccessApp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -12,9 +15,15 @@ public class MainActivity extends Activity
 	Button bt_insert;
 	Button bt_select;
 	ConnexionBDD database;
-	String url = "http://192.168.1.46:8080/cgi-bin/sys/sysRequest.cgi?subfunc=sys_logs&conncsv=1&count=0.808290574233979&sid=7duduham";
+	String queryUrl = "/cgi-bin/sys/sysRequest.cgi?subfunc=sys_logs&conncsv=1&count=0.808290574233979&sid=7duduham";
 	
-    /** Called when the activity is first created. */
+    /**
+	 * Cette méthode est appelée à la création de l'activité (l'ouverture de l'application)
+	 * 
+	 * @param Bundle savedInstanceState
+	 * @return void
+	 * @author Sylvain 
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -39,6 +48,60 @@ public class MainActivity extends Activity
 		
 		database.close();
     }
+	
+	/**
+	 * Cette méthode est appelée lors de l'appuie sur le bouton "menu" du périphérique.
+	 * 
+	 * @see    http://www.tutomobile.fr/faire-des-menus-et-sous-menus-tutoriel-android-n%C2%B012/27/07/2010/
+	 * @param  Menu menu
+	 * @return Boolean 
+	 * @author Sylvain {01/03/2013}
+	 */
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();		//Création d'un MenuInflater qui va permettre d'instancier un Menu XML en un objet Menu
+        inflater.inflate(R.layout.menu, menu);			//Instanciation du menu XML spécifier en un objet Menu
+ 
+        // Il n'est pas possible de modifier l'icône d'entête du sous-menu 
+		// via le fichier XML on le fait donc en JAVA
+    	menu.getItem(0).getSubMenu().setHeaderIcon(R.drawable.options);
+ 
+        return true;
+     }
+	
+	/**
+	 * Cette méthode est appelée lors du clic sur un élément du menu.
+	 * 
+	 * @param item
+	 * @return Boolean
+	 * @author Sylvain {01/03/2013}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		//On regarde quel item a été cliqué grâce à son id et on déclenche une action
+		switch (item.getItemId()) {
+			case R.id.option:
+				Toast.makeText(this, "Option", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.insert:
+				Toast.makeText(this, "Insertion ...", Toast.LENGTH_SHORT).show();
+				insert();
+				return true;
+			case R.id.get:
+				Toast.makeText(this, "Récupération ...", Toast.LENGTH_SHORT).show();
+				select();
+				return true;
+			case R.id.getAll:
+				Toast.makeText(this, "Récupération ...", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.count:
+				Toast.makeText(this, "Comptage ...", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.quitter:
+				finish();
+				return true;
+		}
+		return false;}
 	
 	public void insert()
 	{

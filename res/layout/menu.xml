@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+	<item android:id="@+id/option" 
+		  android:title="Options"
+		  android:icon="@drawable/options">
+
+		<menu android:id="@+id/sousmenu">
+			<item android:id="@+id/insert"
+				  android:title="Ajouter 1 élément"   />	
+
+			<item android:id="@+id/get"
+				  android:title="Récupérer 1 élement"  />
+
+			<item android:id="@+id/getAll"
+				  android:title="Récupérer tout"  />
+
+			<item android:id="@+id/count"
+				  android:title="Compter"  />
+		</menu>
+	</item>
+
+	<item android:id="@+id/quitter" 
+		  android:title="Quitter"
+		  android:icon="@drawable/quit" />
+</menu>
