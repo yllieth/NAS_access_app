@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends Activity
+public class TestActivity extends Activity
 {
 
 	Button bt_insert;
