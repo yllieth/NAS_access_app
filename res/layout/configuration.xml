@@ -2,21 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:title="Connexion">
 		<EditTextPreference
-			android:summary="You can input text here" 
-			android:defaultValue="Empty"
-			android:title="TextToInput" 
-			android:key="editTextPref" />
-		<CheckBoxPreference
-			android:key="pref_sync"
-			android:title="cbx_title"
-			android:summary="cbx_summary"
-			android:defaultValue="true" />
-		<ListPreference
-			android:dependency="pref_sync"
-			android:key="pref_syncConnectionType"
-			android:title="pref_syncConnectionType"
-			android:dialogTitle="pref_syncConnectionType"
-			android:defaultValue="pref_syncConnectionTypes_default" />
+			android:summary="@string/pref_host_address_summary" 
+			android:defaultValue=""
+			android:title="@string/pref_host_address_title" 
+			android:key="@string/pref_host_address_key" />
 	</PreferenceCategory>
 </PreferenceScreen>
 
