@@ -8,12 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.content.Intent;
+import android.view.View.*;
 
 public class TestActivity extends Activity
 {
-
-	Button bt_insert;
-	Button bt_select;
 	ConnexionBDD database;
 	String queryUrl = "/cgi-bin/sys/sysRequest.cgi?subfunc=sys_logs&conncsv=1&count=0.808290574233979&sid=7duduham";
 	
@@ -28,12 +27,13 @@ public class TestActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.test);
 		
 		database = new ConnexionBDD(this);
 		
-		bt_insert = (Button) findViewById(R.id.bt_insert);
-        bt_select = (Button) findViewById(R.id.bt_select);
+		final Button bt_insert = (Button) findViewById(R.id.bt_insert);
+        final Button bt_select = (Button) findViewById(R.id.bt_select);
+		final Button bt_config = (Button) findViewById(R.id.bt_config);
 		
 		bt_insert.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
@@ -45,6 +45,12 @@ public class TestActivity extends Activity
 				select();
         	}
         });
+		bt_config.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				Intent intent = new Intent(TestActivity.this, ConfigActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 		database.close();
     }
@@ -101,7 +107,8 @@ public class TestActivity extends Activity
 				finish();
 				return true;
 		}
-		return false;}
+		return false;
+	}
 	
 	public void insert()
 	{
