@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">NAS Access</string>
 	
-	<string name="pref_host_address_key">conf_host_address</string>
+	<string name="pref_host_address_key">pref_host_address</string>
 	<string name="pref_host_address_summary">Adresse du NAS à interroger</string>
 	<string name="pref_host_address_title">Adresse (distante ou IP)</string>
 </resources>
