@@ -3,6 +3,7 @@
 	<PreferenceCategory android:title="Connexion">
 		<EditTextPreference
 			android:summary="@string/pref_host_address_summary" 
+			android:inputType="textUri"
 			android:defaultValue=""
 			android:title="@string/pref_host_address_title" 
 			android:key="@string/pref_host_address_key" />
